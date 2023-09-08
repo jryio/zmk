@@ -11,12 +11,7 @@
 #include <dt-bindings/led/led.h>
 #include <dt-bindings/zmk/matrix_transform.h>
 
-#include "adv360-layouts.dtsi"
 #include "adv360_pinctrl.dtsi"
-
-&physical_layout0 {
-    transform = <&matrix_transform0>;
-};
 
 / {
     model = "Adv360";
@@ -29,11 +24,11 @@
         zmk,kscan = &kscan0;
         zmk,backlight = &backlight;
         zmk,battery = &vbatt;
-        zmk,physical-layout = &physical_layout0;
+        zmk,matrix_transform = &default_transform;
         zmk,underglow = &led_strip;
     };
 
-    matrix_transform0: keymap_transform_0 {
+    default_transform: keymap_transform_0 {
         compatible = "zmk,matrix-transform";
         columns = <20>;
         rows = <5>;
@@ -48,8 +43,9 @@
 
         >;
     };
-    EXT_POWER {
+    ext-power {
             compatible = "zmk,ext-power-generic";
+            label = "EXT_POWER";
             control-gpios = <&gpio0 13 GPIO_ACTIVE_HIGH>;
         };
 
@@ -92,7 +88,7 @@
     status = "okay";
 };
 
-zephyr_udc0: &usbd {
+&usbd {
     status = "okay";
 };
 
@@ -108,9 +104,11 @@ zephyr_udc0: &usbd {
         #size-cells = <1>;
 
         sd_partition: partition@0 {
+            label = "softdevice";
             reg = <0x00000000 0x00026000>;
         };
         code_partition: partition@26000 {
+            label = "code_partition";
             reg = <0x00026000 0x000c6000>;
         };
 
@@ -124,10 +122,12 @@ zephyr_udc0: &usbd {
          * if enabled.
          */
         storage_partition: partition@ec000 {
+            label = "storage";
             reg = <0x000ec000 0x00008000>;
         };
 
         boot_partition: partition@f4000 {
+            label = "adafruit_boot";
             reg = <0x000f4000 0x0000c000>;
         };
     };
@@ -142,6 +142,7 @@ zephyr_udc0: &usbd {
 
     led_strip: ws2812@0 {
         compatible = "worldsemi,ws2812-spi";
+        label = "WS2812";
 
         /* SPI */
         reg = <0>;
