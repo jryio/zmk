@@ -15,6 +15,8 @@
 / {
     behaviors {
         #include "macros.dtsi"
+        
+        &studio_unlock    
 
         hm: homerow_mods {
             compatible = "zmk,behavior-hold-tap";
